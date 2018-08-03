@@ -1,0 +1,73 @@
+<h1>{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+
+{if $order}
+<h2>{$DICTIONARY.email_order_summary} {$order.order_id}</h2>
+<h3>{$DICTIONARY.email_order_summary_programme} {$program->get('section', 'name')}</h3>
+<p>{$DICTIONARY.email_order_summary_name} <span class="white bold">{$order.name}</span></p>
+<p>{$DICTIONARY.email_order_summary_date}  <span class="white bold">{$order.time|date_format:"%d.%m.%Y - %H:%M"}</span><br /><br />
+   {$DICTIONARY.email_order_summary_persons} <span class="white bold">{$order.people}</span> {if $program->get('value', 'type') != '2'}, {$DICTIONARY.email_order_summary_cars} <span class="white bold">{$order.cars}</span>{/if}{if $program->get('value', 'price_type') == 3}, {$DICTIONARY.email_order_summary_hours} <span class="white bold">{$order.hours}</span>{/if}</p>
+<p>{$DICTIONARY.email_order_summary_pickup}<br />
+{$order.location}</p>
+<!--<p>{$DICTIONARY.email_order_summary_goods}<br />
+{foreach from=$accessories item=row}
+	{if $row.amount > 0}
+	{$row.amount}x {$HELPER->codebook('accessories', $row.accessory_id)->get('item', 'name')}{if $row@last == false}, {/if}
+	{/if}
+{/foreach}
+</p>-->
+<h3>{$DICTIONARY.email_order_payment_amount} <strong>{$order.price} {$DICTIONARY.currency_text} ({$DICTIONARY.currency})</strong></h3>
+
+	{if $order.status == 'paid'}
+<!--Objednavka byla jiz zaplacena.-->	
+<p class="big bg-red white">{$DICTIONARY.order_status_paid}</p>
+	{elseif $order.status == 'cancelled'}
+<!-- Objednavka byla zrusena.-->
+<p class="big bg-red white">{$DICTIONARY.order_status_canceled}</p>
+	{else}
+<div class="forms">
+<form action="https://secure.paypal.com/uk/cgi-bin/webscr" method="post" name="paypal" id="paypal">
+    <!-- Prepopulate the PayPal checkout page with customer details, -->
+    <input type="hidden" name="first_name" value="">
+    <input type="hidden" name="last_name" value="{$order.name}">
+    <input type="hidden" name="email" value="{$order.email}">
+    <input type="hidden" name="address1" value="">
+    <input type="hidden" name="address2" value="">
+    <input type="hidden" name="city" value="">
+    <input type="hidden" name="zip" value="">
+    <input type="hidden" name="day_phone_a" value="{$order.phone}">
+    <input type="hidden" name="day_phone_b" value="">
+
+    <!-- We don't need to use _ext-enter anymore to prepopulate pages -->
+    <!-- cmd = _xclick will automatically pre populate pages -->
+    <!-- More information: https://www.x.com/docs/DOC-1332 -->
+    <input type="hidden" name="cmd" value="_xclick" />
+    <input type="hidden" name="business" value="historycar@seznam.cz" />
+    <input type="hidden" name="cbt" value="History Car" />
+    <input type="hidden" name="currency_code" value="{$order.currency}" />
+
+    <!-- Allow the customer to enter the desired quantity -->
+    <input type="hidden" name="quantity" value="1" />
+    <input type="hidden" name="item_name" value="{$program->get('section', 'name')}" />
+
+    <!-- Custom value you want to send and process back in the IPN -->
+    <input type="hidden" name="custom" value="{$order.variable}" />
+
+    <input type="hidden" name="shipping" value="0" />
+    <input type="hidden" name="invoice" value="{$order.order_id}" />
+    <input type="hidden" name="amount" value="{$order.price}" />
+    <input type="hidden" name="charset" value="utf-8" />
+    <input type="hidden" name="return" value="{$SECTION->get('url')}?id={$hash}"/>
+    <input type="hidden" name="cancel_return" value="{$SECTION->get('url')}?id={$hash}" />
+
+    <!-- Where to send the PayPal IPN to. -->
+    <input type="hidden" name="notify_url" value="{$SECTION->get('url')}?id={$hash}" />
+    <input type="submit" class="submit continue floatleft" value="{$DICTIONARY.order_status_pay}">
+    <div class="clearer"></div>
+    <p class="white">({$DICTIONARY.order_paypal_info})</p>
+</form>
+</div>
+	{/if}
+{else}
+<p>{$DICTIONARY.order_status_unknown}</p>
+{/if}

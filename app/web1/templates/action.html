@@ -1,0 +1,22 @@
+<!-- DETAIL -->
+<strong class="big ">{$SECTION->get('value', 'type')}</strong>
+<h1>{$SECTION->get('value', 'fullname')}</h1>
+{$image = $SECTION->get('file', 'image')}
+{if $image}
+<img src="{$FILES}250/{$image[0].file}" alt="">
+{/if}
+{$SECTION->get('value', 'description')}
+<div class="FFclearer"></div>
+<br />
+{$gallery = $SECTION->get('file', 'gallery')}
+{if $gallery}
+<div id="galerie">
+	<h2>Fotogalerie</h2>
+	{foreach from=$gallery item=image}
+	<div class="item"><a href="{$FILES}w800/{$image.file}" title="" class="lightbox" rel="gal"><img src="{$DESIGN}trans.gif" alt="" style="background: url('{$FILES}h160/{$image.file}') top center no-repeat;" /><strong>{$image.alt}</strong></a> <div><p>{$image.description}</p></div></div>
+	{/foreach}
+	</div><!-- galerie -->
+	<div class="FFclearer"></div>
+<br />
+{/if}
+<!-- DETAIL-KONEC -->

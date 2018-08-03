@@ -1,0 +1,47 @@
+<h1>{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+<div id="bonusList">
+	<img src="{$DESIGN}shadow.png" class="imgfull" alt="" />
+	<div class="bonusListContent">
+{foreach from=$SECTION->get('children', true) item=row}
+		<div class="item">
+			<div class="image">
+	{$image = $row->get('file', 'image')}
+	{if $image}
+				<img src="{$FILES}{$image[0].file}" alt="" />
+	{/if}
+	<!-- Nové: Pokud je galerie -->
+	{$gallery = $row->get('file', 'gallery')}
+  {if $gallery}	
+    {foreach from=$gallery item=image}
+    {if $image@first == true}<a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$row->section_id}" data-title="{$image.description}"><span>&nbsp;</span></a>
+	  {else}<a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$row->section_id}" class="displaynone" data-title="{$image.description}">&nbsp;</a>
+    {/if}
+    {/foreach}
+  {/if}
+  	<!-- Nové: konec galerie -->
+				<div class="bonusbox">
+					<div class="bonus">{$DICTIONARY.discount_vouchers_bonus} {$row->get('value', 'bonus')}</div>
+					<div class="shadow"><img src="{$DESIGN}shadow.png" class="imgfull" alt="" /></div>					
+				</div>
+			</div>
+			<div class="text">
+			  <h2>{$row->get('value', 'header')}</h2>
+				{$row->get('value', 'info')} 
+			</div>
+			<div class="clearer"></div>
+			<div class="info">
+				<p>
+        {if $row->get('value', 'address')}<span>{$DICTIONARY.discount_vouchers_address}</span> {$row->get('value', 'address')}<br /> {/if}
+				{if $row->get('value', 'contact')}<span>{$DICTIONARY.discount_vouchers_phone}</span> {$row->get('value', 'contact')}<br /> {/if}
+				{if $row->get('value', 'openings')}<span>{$DICTIONARY.discount_vouchers_openhours}</span> {$row->get('value', 'openings')}<br /> {/if}
+				</p>
+				{if $row->get('value', 'web')}
+        <a href="http://{$row->get('value', 'web')}" class="web targetblank" rel="nofollow">{$row->get('value', 'web')}</a>
+        {/if}
+			</div>		
+			<div class="clearer"></div>
+		</div>
+{/foreach}
+	</div>
+</div><!-- List -->

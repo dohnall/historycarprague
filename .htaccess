@@ -1,0 +1,40 @@
+RewriteEngine on
+
+RewriteCond %{HTTP_HOST} ^historycarprague.com
+RewriteRule (.*) http://www.historycarprague.com/$1 [R=301,L]
+
+RewriteRule ^admin\/?(.*) - [L]
+RewriteRule ^install\/?(.*) - [L]
+RewriteRule ^lib\/?(.*) - [L]
+
+RewriteRule files\/download\/([a-z0-9\-\_]+\..*)$ /lib/service/file.php?file=$1 [L,QSA]
+RewriteRule files\/([a-z0-9]+)\/([a-z0-9\-\_]+\.(jpg|jpeg|gif|png))$ /lib/service/image.php?size=$1&file=$2 [L,QSA]
+RewriteRule ^sitemap.xml$ /lib/service/sitemap.php [L,QSA]
+
+RewriteCond %{REQUEST_URI} (\.[a-zA-Z]+)$
+RewriteRule ^(.*)$ - [L]
+
+RewriteRule ^(([a-z]{2})\/)?((ajax)\/)?(.*)\/page\-([0-9]+)\/?$ /index.php?lang=$2&ajax=$4&path=$5&page=$6 [L,QSA]
+RewriteRule ^(([a-z]{2})\/)?((ajax)\/)?(.*)\/?$ /index.php?lang=$2&ajax=$4&path=$5 [L,QSA]
+
+<IfModule mod_deflate.c>
+  <FilesMatch "\\.(js|css|html|htm|php|xml)$">
+    SetOutputFilter DEFLATE
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(flv|ico|pdf|avi|mov|ppt|doc|mp3|wmv|wav)$">
+    Header set Cache-Control "max-age=1209600, public"
+  </FilesMatch>
+  <FilesMatch "\.(txt|xml|js|css)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+</IfModule>
+
+<IfModule pagespeed_module>
+  ModPagespeed on
+  ModPagespeedEnableFilters make_google_analytics_async
+  
+  
+</IfModule>

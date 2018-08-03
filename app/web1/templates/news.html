@@ -1,0 +1,20 @@
+<div id="newsDetail">
+{$image = $SECTION->get('file', 'image')}
+	<h1>{$SECTION->get('value', 'header')}</h1>
+	{if $image}<div class="image"><img src="{$FILES}{$image[0].file}" alt="" /></div>{/if}
+	<div class="text">
+		{$SECTION->get('value', 'content')}
+	</div>
+</div><!-- newsDetail -->
+<div class="clearer"></div>
+{$gallery = $SECTION->get('file', 'gallery')}
+{if $gallery}
+<div class="ImageGallery">
+	{foreach from=$gallery item=image}
+	<div class="item"><div class="itemContent"><a href="{$FILES}{$image.file}" data-lightbox="roadtrip" data-title="{$image.description}"><img src="{$FILES}{$image.file}" alt="" /></a></div></div>
+	{/foreach}
+</div>
+<div class="clearer"></div>
+{/if}
+<p>&nbsp;</p>
+<a href="{$HELPER->section($SECTION->get('section', 'parent_id'))->get('url')}" class="button-back">{$DICTIONARY.button_back}</a>

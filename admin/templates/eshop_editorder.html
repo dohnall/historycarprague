@@ -1,0 +1,107 @@
+{$program = $HELPER->section($data.program_id)}
+<h1 class="h-user h-user-profile">{if $item_id}Objednávka č. {$item_id} - {$program->get('value', 'header')}{else}{#new_item#}{/if}</h1>
+<p class="navi"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order" class="button back">{#back_to_list#}</a></p>
+<div class="clr"><hr /></div>
+<form method="post" action="">
+    <table>
+        <tr>
+            <th class="th-label th-time"><label for="time">Datum a čas</label>:</th>
+            <td><input type="text" name="time" id="time" class="datetimetype" value="{$data.time}" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-name"><label for="name">Jméno</label>:</th>
+            <td><input type="text" name="name" id="name" value="{$data.name}" size="100" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-email"><label for="email">{#email#}</label>:</th>
+            <td><input type="text" name="email" id="email" value="{$data.email}" size="50" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-phone"><label for="phone">Telefon</label>:</th>
+            <td><input type="text" name="phone" id="phone" value="{$data.phone}" size="50" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-people"><label for="people">Osob</label>:</th>
+            <td><input type="text" name="people" id="people" value="{$data.people}" size="100" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-cars"><label for="cars">Vozů</label>:</th>
+            <td><input type="text" name="cars" id="cars" value="{$data.cars}" size="100" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-hours"><label for="hours">Hodin</label>:</th>
+            <td><input type="text" name="hours" id="hours" value="{$data.hours}" size="100" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-location"><label for="location">Místo vyzvednutí</label>:</th>
+            <td><input type="text" name="location" id="location" value="{$data.location}" size="100" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-note"><label for="note">Poznámka</label>:</th>
+            <td><textarea name="note" id="note">{$data.note}</textarea></td>
+        </tr>
+        <tr>
+            <th class="th-label th-payment"><label for="payment">Platba</label>:</th>
+            <td>
+                <select name="payment" id="payment">
+                    <option value="paypal"{if $data.payment == 'paypal'} selected="selected"{/if}>paypal</option>
+                    <option value="transfer"{if $data.payment == 'transfer'} selected="selected"{/if}>bankovní převod</option>
+                    <option value="cash"{if $data.payment == 'cash'} selected="selected"{/if}>hotově</option>
+                </select>
+			</td>
+        </tr>
+        <tr>
+            <th class="th-label th-price"><label for="price">Cena</label>:</th>
+            <td><input type="text" name="price" id="price" value="{$data.price}" size="50" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-currency"><label for="currency">Měna</label>:</th>
+            <td>
+                <select name="currency" id="currency">
+                    <option value="CZK"{if $data.currency == 'CZK'} selected="selected"{/if}>CZK</option>
+                    <option value="EUR"{if $data.currency == 'EUR'} selected="selected"{/if}>EUR</option>
+                </select>
+			</td>
+        </tr>
+        <tr>
+            <th class="th-label th-variable"><label for="variable">Variabilní symbol</label>:</th>
+            <td><input type="text" name="variable" id="variable" value="{$data.variable}" maxlength="8" /></td>
+        </tr>
+        <tr>
+            <th class="th-label th-status"><label for="status">Stav</label>:</th>
+            <td>
+                <select name="status" id="status">
+                    <option value="new"{if $data.status == 'new'} selected="selected"{/if}>nová</option>
+                    <option value="paid"{if $data.status == 'paid'} selected="selected"{/if}>zaplacená</option>
+                    <option value="cancelled"{if $data.status == 'cancelled'} selected="selected"{/if}>zrušená</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th class="th-submit">&nbsp;</th>
+            <td>
+                <input type="hidden" name="item_id" value="{$item_id}" />
+                <input type="submit" name="save" value="{#save#}" />
+            </td>
+        </tr>
+    </table>
+</form>
+<h2>Doplňkové zboží</h2>
+<table>
+	<tr>
+		<th>Název</th>
+		<th>Cena za ks</th>
+		<th>Ks</th>
+		<th>Cena</th>
+	</tr>
+{foreach from=$data.items item=row}
+	{$item = $HELPER->codebook('accessories', $row.accessory_id)}
+	<tr>
+		<td>{$item->get('item', 'name')}</td>
+		<td>{$row.price}</td>
+		<td>{$row.amount}</td>
+		<td>{$row.price * $row.amount}</td>
+	</tr>
+{/foreach}
+</table>
+

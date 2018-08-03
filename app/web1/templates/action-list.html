@@ -1,0 +1,35 @@
+<!-- VYPIS-AKCI -->
+<h1>{$SECTION->get('section', 'name')}</h1>
+{$SECTION->get('value', 'content')}
+<div class="FFclearer"><hr /></div>
+{include file="pager.html"}
+<div class="press-list">
+{foreach from=$actions item=row}
+	{$image = $row->get('file', 'image')}
+	{$gallery = $row->get('file', 'gallery')}
+	<div class="item">  
+			<div class="image">
+				<a href="{if $row->get('value', 'url')}{$row->get('value', 'url')}{else}{$row->get('url')}{/if}">
+	{if $image}
+					<img src="{$DESIGN}trans.gif" alt="" style="background: url('{$FILES}h160/{$image[0].file}') top center no-repeat;" />
+	{elseif $gallery}
+					<img src="{$DESIGN}trans.gif" alt="" style="background: url('{$FILES}h160/{$gallery[0].file}') top center no-repeat;" />
+	{else}
+					<img src="{$DESIGN}list-noimage.jpg" alt="" />
+	{/if}
+				</a>
+			</div>
+			<div class="text">
+			<strong class="date">{$row->get('value', 'type')}</strong>
+			<h2 class="nopaddingbottom"><a href="{if $row->get('value', 'url')}{$row->get('value', 'url')}{else}{$row->get('url')}{/if}">{$row->get('value', 'fullname')}</a></h2>
+		  <p>{$row->get('value', 'perex')|nl2br}</p>
+		</div>
+		<div class="FFclearer"><hr /></div>
+	</div>
+{/foreach}
+</div><!-- press -->
+{include file="pager.html"}
+<div class="FFclearer"></div>
+<br />
+
+<!-- VYPIS-AKCI-KONEC -->

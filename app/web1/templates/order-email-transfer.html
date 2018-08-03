@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{$DICTIONARY.order_subject}</title>
+</head>
+<body>
+<table cellspacing="0" cellpadding="0" width="100%" bgcolor="#ebebeb">
+<tbody>
+<tr>
+<table style="border-top: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000; font-family: sans-serif;" cellspacing="0" cellpadding="0" width="604">
+<tr><td style="background-color: #ffffff; border-top: 0px solid #333333; border-bottom: 10px solid #FFFFFF;" align="left" valign="middle"><img src="cid:image_header" border="0" alt="History Car" align="center" /></td></tr>
+</table>
+<table style="border-left: 2px solid #000000; border-right: 2px solid #000000; font-family: sans-serif;" cellspacing="0" cellpadding="0" width="604">
+<tr><td style="background-color: #ffffff; border-top: 0px solid #333333; border-bottom: 10px solid #FFFFFF; padding: 0px 15px 20px 15px; max-width:604px; font-size: 14px; overflow:hidden;" align="left" valign="top">
+<!-- SHRNUTI -->
+<h1 style="text-align:center;">{$DICTIONARY.email_order_title}</h1>
+<p style="text-align:center;">{$DICTIONARY.email_order_thanks}</p>
+
+<h2>{$DICTIONARY.email_order_summary} {$order_id}</h2>
+<p>{$DICTIONARY.email_order_summary_programme} {$program->get('section', 'name')}</p>
+<p>{$DICTIONARY.email_order_summary_name} {$data.fullname}</p>
+<p>{$DICTIONARY.email_order_summary_contact} {$data.phone_cc} {$data.phone}, {$data.email}</p>
+<p>{$DICTIONARY.email_order_summary_date}  {$time|date_format:"%d.%m.%Y - %H:%M"}<br />
+   {$DICTIONARY.email_order_summary_persons} {$data.people}{if $program->get('value', 'type') != 2}, {$DICTIONARY.email_order_summary_cars} {$data.cars}{/if}{if $program->get('value', 'price_type') == 3}, {$DICTIONARY.email_order_summary_hours} {$data.hours}{/if}</p>
+<p>{$DICTIONARY.email_order_summary_pickup}<br />
+{$data.location}</p>
+{if $program->get('value', 'type') != 2}
+<p><br />{$DICTIONARY.email_order_summary_goods}<br />
+{foreach from=$data.accessory item=v key=k}
+	{if $v > 0}
+	{$v}x {$HELPER->codebook('accessories', $k)->get('item', 'name')}{if $v@last == false}, {/if}
+	{/if}
+{/foreach}
+</p>
+{/if}
+<hr />
+<p>{$DICTIONARY.email_order_comment}<br />{$data.note}</p>
+
+<!-- SHRNUTI-KONEC -->
+</td></tr>
+</table>
+<table style="border-left: 2px solid #000000; border-right: 2px solid #000000; font-family: sans-serif;" cellspacing="0" cellpadding="0" width="604">
+<tr><td style="background-color: #333333; border-top: 0px solid #333333; border-bottom: 10px solid #FFFFFF; padding: 20px 15px 20px 15px; max-width:604px; font-size: 14px; color:#FFFFFF;overflow:hidden;" align="left" valign="top">
+<!-- PLATBA -->
+<p><strong>{$DICTIONARY.email_order_payment}</strong></p>
+<p>{$DICTIONARY.email_order_payment_method} {$DICTIONARY.form_order_payment_bank}</p>
+<p>{$DICTIONARY.email_order_payment_amount} <strong>{$price} {$DICTIONARY.currency_text}</strong></p>
+<p>{$DICTIONARY.email_order_payment_variable} <strong>{$variable}</strong> {$DICTIONARY.email_order_payment_variableinfo}</p>
+<p>{$DICTIONARY.email_order_payment_account} <strong>{$DICTIONARY.email_order_bank}</strong></p>
+<p>IBAN: <strong>{$DICTIONARY.email_order_bank_iban}</strong></p>
+<p>SWIFT: <strong>{$DICTIONARY.email_order_bank_swift}</strong></p>
+<!-- PLATBA-KONEC -->        
+</td></tr>
+</table>
+<table style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000; font-family: sans-serif;" cellspacing="0" cellpadding="0" width="604">
+<tr><td style="position:relative; height:160px; background-color: #ffffff;" align="center" valign="middle">
+<img src="cid:image_footer" border="0" alt="" align="center" style="margin-bottom:-100px;top:0px; left:0px;z-index:1"/>
+<p style="z-index:2;text-align:center;font-size:13px;">{$DICTIONARY.email_order_contact}</p>
+</td></tr>
+</table>
+</tr>
+</tbody>
+</table>
+</body>
+</html>

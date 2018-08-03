@@ -1,0 +1,56 @@
+<h1>{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+
+<div id="productCats" class="balicky cols cols3">
+<img src="{$DESIGN}shadow.png" class="imgfull" alt="" />
+<div class="productCatsContent">
+
+{foreach from=$SECTION->get('children', true) item=row}
+	{$image = $row->get('file', 'image')}
+	<div class="item">
+		<div class="itemContent">
+		 	<div class="itemImage">
+    	{if $image}
+			<img src="{$FILES}{$image[0].file}" alt="" class="imgfull" />
+	    {/if}
+      </div>
+      <h2 class="small center"><span>{$row->get('section', 'name')}</span></h2>
+			<div class="itemText">
+				{$row->get('value', 'info')}
+				<div class="more"><a href="{$row->get('url')}" class="button">{$DICTIONARY.button_readmore}</a></div>
+			</div>
+			<a href="{$row->get('url')}" class="coverlink">&nbsp;</a>
+		</div>
+	</div>
+{/foreach}
+</div></div>
+
+
+{$gallery = $SECTION->get('file', 'gallery')}
+	{if $gallery}
+<div class="ImageGallery">
+<img src="{$DESIGN}shadow.png" class="imgfull" alt="" />
+		{foreach from=$gallery item=image}
+	<div class="item"><div class="itemContent"><a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$row->section_id}" data-title="{$image.description}"><img src="{$FILES}{$image.file}" alt="" /></a></div></div>
+		{/foreach}
+</div>
+	{/if}
+<!--	{if $row@last == false}
+<div class="delic"></div>
+<hr /><p>&nbsp;</p>
+	{/if}-->
+
+
+<!--
+<div id="productCats" class="balicky cols cols3">
+<img src="{$DESIGN}shadow.png" class="imgfull" alt="" />
+<div class="productCatsContent">
+{foreach $SECTION->get('children', true) item=row}
+<div class="item">
+  <div class="itemContent w300px">
+			<div class="image">
+		  <a href="{$row->get('url')}">{$row->get('section', 'name')}</a>{if $row@last == false} | {/if}
+	</div>
+</div>
+{/foreach}
+</div></div>--><!-- List -->

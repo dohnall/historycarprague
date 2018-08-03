@@ -1,0 +1,79 @@
+{if $date}
+	{if is_array($program->get('value', 'days')) && in_array($udate, $program->get('value', 'days'))}
+{if $program->get('value', 'type') != '2'}<!--<h3 class="nomargintop"><strong>{$date|date_format:"%d.%m.%Y"}</strong>{$DICTIONARY.form_order_time_info}</h3>-->{/if}
+		{if $is_free}
+			{if $program->get('value', 'type') == '2' && (!is_array($times) || count($times) == 1)}
+				<p class="big">
+        <strong>{$program->get('value', 'note_tourstart')}</strong><br />        
+        <br />{$program->get('value', 'note_pickup')}<br />
+        {if $program->get('value', 'min') > 0}<br />
+           {$DICTIONARY.offer_persons_min} &nbsp;&nbsp;{$program->get('value', 'min')}&nbsp;
+           {$persontext = $program->get('value', 'min')}
+           {* {if $persontext == 1} {$DICTIONARY.offer_person_txt1}{/if}
+           {if $persontext > 1 && $persontext < 5} {$DICTIONARY.offer_person_txt2}{/if}
+           {if $persontext > 4} {$DICTIONARY.offer_person_txt3} {/if} *}
+        {/if}
+        </p>
+       
+        
+        {*
+        <p class="big">
+        {if $program->get('value', 'note_max') > 0}<br />
+           {$DICTIONARY.offer_group_size} &nbsp;&nbsp;{$program->get('value', 'note_max')}&nbsp;
+           {$persontext = $program->get('value', 'note_max')}
+           {if $persontext == 1} {$DICTIONARY.offer_person_txt1}{/if}
+           {if $persontext > 1 && $persontext < 5} {$DICTIONARY.offer_person_txt2}{/if}
+           {if $persontext > 4} {$DICTIONARY.offer_person_txt3} {/if}
+        {/if}        
+        {if $program->get('value', 'max') > 0}<br /><br />{$DICTIONARY.form_order_capacity} <span id="capacity" class="white bold">&nbsp;&nbsp;{$capacity}</span>{/if}
+        {if $program->get('value', 'note_group')}<br /><br />{$program->get('value', 'note_group')}{/if}
+         </p>
+         *}
+			{else}
+				{foreach from=$times item=row}
+					{if $row@iteration%7 == 1}
+          <div class="w50 floatleft" id="time">
+					{/if}
+					{if ($program->get('value', 'type') == '1' && $row > $driveAllowedOrder) || $program->get('value', 'type') == '2'}
+	        <input type="radio" name="time" data-cars="{if $program->get('value', 'carnumber')}{$program->get('value', 'carnumber')}{else}{if isset($cars.$row)}{$cars.$row}{else}{$DICTIONARY.settings_cars}{/if}{/if}" value="{$row}" id="time{$row@iteration}"{if (isset($cars.$row) && $cars.$row < 1) || ($program->get('value', 'max') && $cars.$row < 20)} disabled="disabled" class="radio-disabled" {/if}{if $data.time == $row} checked="checked"{/if} /><label for="time{$row@iteration}" {if (isset($cars.$row) && $cars.$row < 1) || ($program->get('value', 'max') && $cars.$row < 20)}class="radio radio-disabled"{else}class="radio"{/if}><strong>{$HELPER->codebook('time', $row)->get('item', 'name')} </strong>{if $program->get('section', 'parent_id') != 905} <!--({$DICTIONARY.form_order_time_cars}: {if $cars.$row > 0}{$cars.$row}{else}0{/if})-->{/if}</label><!--<br />-->
+					{/if}
+					{if $row@iteration%7 == 0 || $row@last === true}
+					</div>
+					<div class="clearer"></div>
+					{/if}
+				{/foreach}
+									 
+				{if $program->get('value', 'type') == '2'}
+				<div class="clearer"></div>
+				<p class="big">
+        <strong>{$program->get('value', 'note_tourstart')}</strong><br /><br />
+        {$program->get('value', 'note_pickup')}<br />
+        {if $program->get('value', 'min') > 0}<br />
+           {$DICTIONARY.offer_persons_min} &nbsp;&nbsp;{$program->get('value', 'min')}&nbsp;
+           {$persontext = $program->get('value', 'min')}
+        {* {if $persontext == 1} {$DICTIONARY.offer_person_txt1}{/if}
+           {if $persontext > 1 && $persontext < 5} {$DICTIONARY.offer_person_txt2}{/if}
+           {if $persontext > 4} {$DICTIONARY.offer_person_txt3} {/if} *}
+        {/if}
+        {if $program->get('value', 'note_max') > 0}<br />
+           {$DICTIONARY.offer_group_size} &nbsp;&nbsp;{$program->get('value', 'note_max')}&nbsp;
+           {$persontext = $program->get('value', 'note_max')}
+        {* {if $persontext == 1} {$DICTIONARY.offer_person_txt1}{/if}
+           {if $persontext > 1 && $persontext < 5} {$DICTIONARY.offer_person_txt2}{/if}
+           {if $persontext > 4} {$DICTIONARY.offer_person_txt3} {/if} *}
+        {/if}        
+        {if $program->get('value', 'max') > 0}<br /><br />{$DICTIONARY.form_order_capacity} <span id="capacity" class="white bold">&nbsp;&nbsp;{$capacity}</span>{/if}
+        <!--{if $program->get('value', 'note_group')}<br /><br /><span class="big">{$program->get('value', 'note_group')}</span>{/if}-->
+        </p>
+				{/if}
+			{/if}
+		{else}
+		{$DICTIONARY.form_order_time_booked}
+		{/if}
+	{else}
+<p class="big">{$DICTIONARY.form_order_booked}</p>
+	{/if}
+{else}
+<p class="big">{$DICTIONARY.form_order_time}</p>
+{/if}
+<div class="clearer"></div>

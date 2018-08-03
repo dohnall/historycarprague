@@ -1,0 +1,18 @@
+<h1>{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+<p>&nbsp;</p>
+{foreach from=$SECTION->get('children', true) item=row}
+<h2>{$row->get('value', 'header')}</h2>
+{$gallery = $row->get('file', 'gallery')}
+	{if $gallery}
+<div class="ImageGallery">
+		{foreach from=$gallery item=image}
+	<div class="item"><div class="itemContent"><a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$row->section_id}" data-title="{$image.description}"><img src="{$FILES}{$image.file}" alt="" /></a></div></div>
+		{/foreach}
+</div>
+	{/if}
+	{if $row@last == false}
+<div class="delic"></div>
+<hr /><p>&nbsp;</p>
+	{/if}
+{/foreach}

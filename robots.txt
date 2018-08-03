@@ -1,0 +1,3 @@
+User-agent: *
+Allow:
+Sitemap: http://www.historycarprague.com/sitemap.xml

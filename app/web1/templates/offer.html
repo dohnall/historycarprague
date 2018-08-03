@@ -1,0 +1,192 @@
+<h1>{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+<div id="productList">
+	<!--<img src="{$DESIGN}shadow.png" class="imgfull" alt="" />-->
+	<div class="productListContent">
+{foreach from=$SECTION->get('children', true) item=row}
+		<div class="item">
+		{$newitem = $row->get('value', 'new_item')}
+  	{$newitemtext = $row->get('value', 'new_itemtext')}
+		{if $newitem}
+		  {if $newitemtext}
+		  <div class="new-item"><div class="new-item-content">{$newitemtext}</div></div>
+		  {/if}
+    {/if}
+			
+			<div class="w45 floatleft">	
+						
+			<!--<div class="title"><h2>{$row->get('value', 'header')}</h2></div>-->
+			<div class="pricebox">
+				<div class="price">{$row->get('value', 'before_price')}: &nbsp;&nbsp;<span class="bigger">{$row->get('value', 'price')}&nbsp;{$DICTIONARY.currency_text}</span></div>
+        <!--<div class="afterprice"><span class="">{$row->get('value', 'after_price')}</span></div>-->
+        <div class="clearer"></div>
+        {if $row->get('value', 'show_sale_info')}<span class="sale">{$row->get('value', 'sale_info')}</span>{/if}
+        <div class="clearer"></div>
+  			<div class="order"><a href="{$HELPER->section(895)->get('url')}?program={$row->section_id}" class="button">{$DICTIONARY.button_booking}</a></div>
+        <div class="clearer"></div>
+        
+        <div class="info">
+         {*<!--{$row->get('value', 'after_price')}-->
+         <!--{if $row->get('value', 'note_tourstart')}<div>{$row->get('value', 'note_tourstart')}</div><hr />{/if}-->
+         <!--{if $row->get('value', 'note_tourstart2')}<div class="tourstart2 bold">{$row->get('value', 'note_tourstart2')}</div>{/if}-->
+         <!--{if $row->get('value', 'note_pickup')}<div>{$row->get('value', 'note_pickup')}</div>{/if}-->
+         <!--{if $row->get('value', 'length')}
+         <div>         
+         {$DICTIONARY.offer_length} &nbsp;{$row->get('value', 'length')}&nbsp;
+           {$hourtext = $row->get('value', 'length')}
+           {if $hourtext == 1} {$DICTIONARY.offer_hour_txt1} {/if}
+           {if ($hourtext > 1) && ($hourtext < 5)} {$DICTIONARY.offer_hour_txt2} {/if}
+           {if $hourtext > 4} {$DICTIONARY.offer_hour_txt3} {/if}
+         </div>
+         {/if}-->*}
+         
+         
+         {if $row->get('value', 'after_price')}{$row->get('value', 'after_price')}{/if}
+         {if $row->get('value', 'min') || $row->get('value', 'note_max')}<!--<hr />-->{/if}
+         {if $row->get('value', 'min')}
+         <div>       
+         {$DICTIONARY.offer_persons_min} &nbsp;{$row->get('value', 'min')}&nbsp;
+           {$persontext = $row->get('value', 'min')}           
+           {*<!--{if $persontext == 1} {$DICTIONARY.offer_person_txt1}{/if}
+           {if $persontext > 1 && $persontext < 5} {$DICTIONARY.offer_person_txt2}{/if}
+           {if $persontext > 4} {$DICTIONARY.offer_person_txt3} {/if}-->*}
+         </div>
+         {/if}
+         {*
+         {if $row->get('value', 'note_max')}
+         <div>         
+         {$DICTIONARY.offer_group_size} &nbsp;{$row->get('value', 'note_max')}&nbsp;
+         {$persontext = $row->get('value', 'note_max')}
+            <!--{if $persontext == 1} {$DICTIONARY.offer_person_txt1}{/if}
+           {if $persontext > 1 && $persontext < 5} {$DICTIONARY.offer_person_txt2}{/if}
+           {if $persontext > 4} {$DICTIONARY.offer_person_txt3} {/if}-->
+         </div>
+         {/if}
+         {if $row->get('value', 'note_group')}<div><hr />{$row->get('value', 'note_group')}</div>{/if}
+
+         <!--{if $row->get('value', 'max')}<br />{$DICTIONARY.offer_persons_max} &nbsp;{$row->get('value', 'max')}{/if}-->
+         *}
+        </div>
+       </div> 
+
+        {*<!--<div class="shadow"><img src="{$DESIGN}shadow.png" class="imgfull" alt="" /></div>-->*}
+			
+			<div class="clearer"></div>
+			<!--<hr />-->
+      <div class="text big">
+      <p></p>
+				{$row->get('value', 'info')}
+			<p></p>
+      </div>
+			
+		  	{if $row->get('value', 'coupons') || $row->get('value', 'venice')}
+			<div class="bonuses">
+          <p><strong class="white">{$DICTIONARY.offer_bonus}</strong></p>
+			    <ul class="nopaddingtop">
+          {if $row->get('value', 'coupons')}<li><strong><a href="{$HELPER->section(907)->get('url')}">{$DICTIONARY.offer_bonus_coupons}</a></strong></li>{/if}
+          {if $row->get('value', 'venice')}<li><strong><a href="{$HELPER->section(944)->get('url')}">{$DICTIONARY.offer_bonus_venice}</a></strong></li>{/if}
+          </ul>
+		  </div>
+	  		{/if}
+	  	
+	  	</div>	
+	  		  	
+	  	
+	  	<div class="w50 floatright">
+	  	<div class="image w100 floatright">
+		{$image = $row->get('file', 'image')}
+{*<!--{if $image}
+				<img src="{$FILES}{$image[0].file}" alt="" /><br />
+				<div class="image-text big center centered">{$DICTIONARY.offer_gallery_text}</div>
+			{/if}-->	
+<!--	{$gallery = $row->get('file', 'gallery')}
+  {if $gallery}	
+    {foreach from=$gallery item=image}
+    {if $image@first == true}<a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$row->section_id}" data-title="{$image.description}" title="{$DICTIONARY.offer_gallery_text}"><span>&nbsp;</span></a>
+	  {else}<a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$row->section_id}" class="displaynone" data-title="{$image.description}">&nbsp;</a>
+    {/if}
+    {/foreach}
+  {/if}-->*}
+
+
+ 	{$gallery = $row->get('file', 'gallery')}
+  {if $gallery}
+  
+<!-- SLIDESHOW -->
+<div id="df_fader" class="df_size">	
+          <!--<img src="{$DESIGN}dfader-spaceholder.jpg" class="spaceholder" alt="" />-->
+          <div class="slidermask">&nbsp;</div>
+          <div class="loader"></div>
+          <div class="info"></div>
+          <!--<a class="linkmore" id="slidesLink" href="kolekce-pohovky.html" >Objevte více</a>-->
+            <!--<div class="special"></div>-->
+            <!--<a class="sliderprev" href="javascript:;"></a>-->
+            <!--<a class="slidernext" href="javascript:;"></a>-->
+          
+          <!--<div class="slidernav">
+             <a class="pos" href="javascript:;">&nbsp;</a>
+         </div>-->
+         <div class="slidesbox xdf_size">
+         <!--<img src="{$DESIGN}dfader-spaceholder.png" class="spaceholder" alt="" />-->
+               <div class="slideold xdf_size"></div>
+               <div class="slides xdf_size">
+                 {foreach from=$gallery item=image}
+                 <div class="slide xdf_size">
+                 <img src="{$FILES}{$image.file}" class="" alt="{$image.description}" />
+                 <div class="clearer"></div>		
+                 <div class="title">{$image.description}</div>
+                 </div>
+                 {/foreach}
+               <div class="clearer"></div>
+               </div>
+         <div class="clearer"></div>      
+         </div>
+         
+        <!-- KDYZ NENI AKCE, TAK TOTO SCHOVAT -->
+        <div class="slidernavpos displaynone"> 
+         <div class="title"></div>
+         <div class="titleold"></div>
+         <div class="slidernav">
+            <a class="pos" href="javascript:;">&nbsp;</a>
+         </div>
+         </div>
+         <img src="{$DESIGN}dfader-spaceholder.png" class="spaceholder" alt="" />
+<div class="clearer"></div>                  
+</div>
+<!-- SLIDESHOW-END -->
+  {/if}
+<p>&nbsp;</p>
+
+      </div>
+      {if $row->get('value', 'button_map')}
+      <div class="clearer"></div>
+  	  <p align="center"><br /><span class="map-button arrow-down centered" scrollto="map">{$DICTIONARY.button_maps}</span></p>
+      {/if}
+      {if $row->get('value', 'video_yt')}
+      <p>&nbsp;</p>
+      <div class="video"> 
+      <iframe class="w100" src="https://www.youtube.com/embed/{$row->get('value', 'video_yt')}?rel=0" frameborder="0" width="100%" height="320"></iframe>
+      </div>
+      <p>&nbsp;</p> 
+      {/if}
+      </div>
+
+      <div class="clearer"></div>
+      <div id="map">
+      <p>&nbsp;</p>	
+      <div class="w100">
+				{$row->get('value', 'map')}
+			<div class="clearer"></div>
+      <p>&nbsp;</p>	
+      </div>
+	  	</div>
+	  	
+			<div class="clearer"></div>
+			<hr />
+			<p align="center"><br /><a class="button button-back centered" href="{$HELPER->section(1)->get('url')}">{$DICTIONARY.button_back}</a></p>
+			
+			
+		</div>
+{/foreach}
+	</div>
+</div>

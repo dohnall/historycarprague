@@ -1,0 +1,51 @@
+<h1 class="center">{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+<div id="productCats" class="xcols cols-top-correction w100">
+<a id="offer"></a>
+<!--<h2 class="superbigger">{$HELPER->section(890)->get('value', 'header')}</h2>-->
+	<div class="productCatsContent">
+	{foreach from=$HELPER->section(890)->get('children', true) item=row}
+	{if $row->get('section', 'template') == 'offer'}
+
+		{$image = $row->get('file', 'image')}
+		{$newitem = $row->get('value', 'new_item')}
+  	{$newitemtext = $row->get('value', 'new_itemtext')}
+    {$capacity = $row->get('value', 'capacity')}
+    
+		<div class="item">
+			<div class="itemContent w100">
+			<!--{if $newitem}
+		    {if $newitemtext}
+		    <div class="new-item"><div class="new-item-content">{$newitemtext}</div></div>
+		    {/if}
+      {/if}-->
+				<div class="itemImage">
+      	{if $image}
+	  		<img src="{$FILES}{$image[0].file}" alt="" />
+      	{/if}
+        </div>
+       
+				<div class="itemText"> 
+          <div class="price">{$row->get('value', 'price')}&nbsp;{$DICTIONARY.currency_text}<br /><span class="smaller nowrap">{$row->get('value', 'after_price')}</span>{if $newitem}<br /><span class="pickup smaller black nowrap">{if $newitemtext}{$newitemtext}{/if}</span>{/if}</div>   
+          <h2 class="small center nowrap"><span>{$row->get('section', 'name')} <br />{if $capacity}<span class="smaller">{$capacity}</span>{/if}</span></h2>
+              
+				  <div class="more"><a href="{$row->get('url')}" class="button">{$DICTIONARY.button_clickhere}</a></div>
+				</div>
+				<a href="{$row->get('url')}" class="coverlink">&nbsp;</a>
+			</div>
+		</div>
+	{/if}
+	{/foreach}
+	</div>
+</div>
+<div class="clearer"></div>
+<p>&nbsp;</p>
+<!--<div class="infobox">
+	<a href="{$HELPER->section(894)->get('url')}" class="infobox center">{$SECTION->get('value', 'home_under_offer')}</a>
+</div>
+<div class="clearer"></div>-->
+
+
+
+
+

@@ -1,0 +1,25 @@
+<div style="padding:20px;">
+{foreach from=$HELPER->section(907)->get('children', true) item=row}
+	<div style="width:350px; height:340px; padding:10px; text-align:center; float:left;">
+		<div style="width:350px; height:340px; border:solid 1px #000; text-align:center; font-size:11px;">
+			<img src="{$DESIGN}discount_voucher_bg.jpg" style="position:absolute; top:0px; left:0px; width:100%; margin-bottom:-310px;">
+			<div style="width:100%; height:65px;"> </div>
+			<div style="width:100%; height:45px; padding:3px 10px;"><h2 style="margin:0;">{$row->get('value', 'header')|upper}</h2></div>
+			<div style="width:100%; height:36px; padding:0px 10px; font-family:sans-serif;">{$row->get('value', 'short')}</div>
+			<div style="width:100%; height:38px; padding:5px 15px; font-size:12px; font-weight:bold; color:#FFFFFF;">
+			<table style="width:100%; text-align:center; vertical-align:middle; font-size:12px; font-weight:bold; color:#FFFFFF;"><tr><td>
+      {$row->get('value', 'bonus')}
+      </td></tr></table>
+      </div>
+			<div style="width:100%; height:18px; padding:0px 10px; font-family:sans-serif;">{$DICTIONARY.pdf_coupon_info} </div>
+			<div style="width:100%; height:20px; padding:0px 10px; font-size:12px; font-weight:bold;">{$row->get('value', 'entrance')}</div>
+			<div style="width:100%; height:48px; padding:0px 10px; font-family:sans-serif; border:solid 0px #900; ">
+			  {if $row->get('value', 'address')}<span>{$DICTIONARY.discount_vouchers_address}</span> {$row->get('value', 'address')}<br />{/if} 
+				{if $row->get('value', 'contact')}<span>{$DICTIONARY.discount_vouchers_phone}</span> {$row->get('value', 'contact')}<br />{/if} 
+				{if $row->get('value', 'openings')}<span>{$DICTIONARY.discount_vouchers_openhours}</span> {$row->get('value', 'openings')}<br />{/if} 
+				{if $row->get('value', 'web')} {$row->get('value', 'web')} {/if} 
+			</div>
+		</div>
+	</div>
+{/foreach}
+</div>

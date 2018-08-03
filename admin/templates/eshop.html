@@ -1,0 +1,13 @@
+<div id="menu">
+    <ul>
+        <li><a href="{$ROOT}?module={$MODULE}&amp;submodule=order"{if $SUBMODULE == 'order' || $SUBMODULE == 'editorder'} class="active"{/if}>Objednávky</a></li>
+        <li><a href="{$ROOT_FRONTEND}lib/service/pdf-vouchers.php?lang=1">Stáhnout vouchery [CZ]</a></li>
+        <li><a href="{$ROOT_FRONTEND}lib/service/pdf-vouchers.php?lang=2">Stáhnout vouchery [EN]</a></li>
+        <li><a href="{$ROOT_FRONTEND}lib/service/pdf-venice.php?lang=1">Stáhnout pražské Benátky [CZ]</a></li>
+        <li><a href="{$ROOT_FRONTEND}lib/service/pdf-venice.php?lang=2">Stáhnout pražské Benátky [EN]</a></li>
+    </ul>
+</div>
+<div id="content">
+    {include file="`$MODULE`_`$SUBMODULE`.html"}
+</div>
+

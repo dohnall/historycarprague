@@ -1,0 +1,26 @@
+<div id="menu">
+    <ul>
+{if $user->hasRight(50)}
+        <li><a href="{$ROOT}?module={$MODULE}&amp;submodule=planning"{if $SUBMODULE == 'planning'} class="active"{/if}>Plánování akcí</a></li>
+{/if}
+{if $user->hasRight(51)}
+        <li><a href="{$ROOT}?module={$MODULE}&amp;submodule=stats"{if $SUBMODULE == 'stats' || $SUBMODULE == 'action' || $SUBMODULE == 'course'} class="active"{/if}>Statistiky</a></li>
+{/if}
+{if $user->hasRight(50) || $user->hasRight(51)}
+		<li>&nbsp;</li>
+		<li>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</li>
+		<li>&nbsp;</li>
+{/if}
+{if isset($currfoll[0])}
+		<li><a href="{$ROOT}?module={$MODULE}&amp;submodule=course&amp;id={$currfoll[0].course_id}">Aktuální akce</a></li>
+{/if}
+{if isset($currfoll[1])}
+		<li><a href="{$ROOT}?module={$MODULE}&amp;submodule=course&amp;id={$currfoll[1].course_id}">Následující akce</a></li>
+{/if}
+    </ul>
+    <div class="clr"><hr /></div>
+</div>
+<div id="content">
+    {include file="`$MODULE`_`$SUBMODULE`.html"}
+</div>
+

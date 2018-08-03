@@ -1,0 +1,32 @@
+<h1 class="h-order h-order-order">Objednávky</h1>
+<table class="list table-order table-order-order">
+    <thead>
+        <tr>
+            <th class="th-id" width="60"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;order=email&amp;sort={if $order=='order_id' && $sort=='asc'}desc{else}asc{/if}">{#id#}</a></th>
+            <th class="th-lname"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;order=name&amp;sort={if $order=='lname' && $sort=='asc'}desc{else}asc{/if}">Jméno</a></th>
+            <th class="th-email"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;order=email&amp;sort={if $order=='email' && $sort=='asc'}desc{else}asc{/if}">{#email#}</a></th>
+            <th class="th-program">Program</th>
+			<th class="th-price"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;order=price&amp;sort={if $order=='price' && $sort=='asc'}desc{else}asc{/if}">Cena</a></th>
+            <th class="th-status"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;order=status&amp;sort={if $order=='status' && $sort=='asc'}desc{else}asc{/if}">{#status#}</a></th>
+            <th class="th-inserted"><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;order=inserted&amp;sort={if $order=='inserted' && $sort=='asc'}desc{else}asc{/if}">{#inserted#}</a></th>
+            <th>{#action#}</th>
+        </tr>
+    </thead>
+    <tbody>
+{foreach from=$items item=row}
+	{$program = $HELPER->section($row.program_id)}
+        <tr class="{cycle values='odd,even'}">
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{$row.order_id}</a> <a href="{$ROOT_FRONTEND}lib/service/pdf-eticket.php?order={$row.order_id}"><span class="ui-icon ui-icon-document"></span></a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{$row.name}</a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{$row.email}</a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{$program->get('value', 'header')}</a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{$row.price} {$row.currency}</a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{if $row.status == 'new'}nová{elseif $row.status == 'paid'}zaplacená{else}zrušená{/if}</a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=editorder&amp;id={$row.order_id}">{$row.inserted|date_format:"%d.%m.%Y %H:%M:%S"}</a></td>
+            <td><a href="{$ROOT}?module={$MODULE}&amp;submodule=order&amp;delete={$row.order_id}" class="delete">{#delete#}</a></td>
+        </tr>
+{/foreach}
+    </tbody>
+</table>
+
+

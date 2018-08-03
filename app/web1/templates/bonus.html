@@ -1,0 +1,10 @@
+<h1>{$SECTION->get('value', 'header')}</h1>
+{$SECTION->get('value', 'content')}
+{$gallery = $SECTION->get('file', 'gallery')}
+{if $gallery}
+<div class="ImageGallery">
+	{foreach from=$gallery item=image}
+	<div class="item"><div class="itemContent"><a href="{$FILES}{$image.file}" data-lightbox="roadtrip{$SECTION->section_id}"><img src="{$FILES}{$image.file}" alt="" /></a></div></div>
+	{/foreach}
+</div>
+{/if}

@@ -1,0 +1,138 @@
+/* DhakraFader v4.2 by Branislav Fábry - HeavenDesign.cz */
+
+.df_size {width:100%; /*height:auto;*/} /* size of slideshow */
+.df_spaceholder {display:block;position:relative;width:100%;height:auto;position:relative;z-index:1;}
+/* video-oprava */
+.video {z-index:100;}
+
+#df_fader{ 
+  font-family: Calibri, Arial CE, Helvetica CE, Arial, Helvetica, sans-serif;
+	padding: 0px; margin-left:auto; margin-right:auto; margin-bottom:20px; 
+  background:url('dfader-bg.jpg') center center no-repeat;
+	position:relative; /*overflow:hidden;*/ clear:both;
+  border: solid #333 0px; 
+  z-index:10;
+  /*-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;*/
+  }
+#df_fader .info{position:absolute; left:100px; top:0px; z-index:10000;}
+#df_fader img.spaceholder {display:block;position:relative;width:100%;height:auto; padding-bottom:50px; position:relative;z-index:10; /*border: solid #DD0 1px;*/}
+
+#df_fader .slidermask{
+	position:absolute; width:100%; height:100%; left:0px; top:0px; padding: 0px; margin: 0px; 
+  background:url('dfader-bg.jpg') top center no-repeat; z-index:1000;
+  }  
+#df_fader .slidesbox{position:absolute; width:100%; height:100%;/*height:calc(100% + 50px);*/ /*border: solid #FF0000 1px;*/ overflow:hidden!important;}
+
+#df_fader .slideold{
+    position:absolute; top:0px; left:0px; padding:0px; margin:0px; float:left; /*overflow:hidden;*/
+    width:100%; height:100%;
+    text-align:left; text-decoration:none!important;
+    /*background:none;*/
+    z-index:2; /*border: solid #AAA 1px;*/
+}
+#df_fader .slideold img {position:relative; display:block; width:100%; height:auto; /*margin-bottom:80px;*/ z-index:1; /*border: solid #DDD 1px;*/ }
+
+
+#df_fader .slides{
+  border: solid #FF77FF 0px;
+	position:relative; /*overflow:hidden;*/ /*display:inline;*/
+  width:100%; height:100%;/*width:960px; height:390px;*/ padding:0px; margin:0px; top:0px; left:0px; z-index:3; /*background:none;*/
+}
+#df_fader .slides .slide{
+    position:absolute; top:0px; left:0px;
+    padding:0px; margin:0px; width:100%; height:100%; min-height:390px;
+    /*float:left;*/ overflow:hidden;
+    /*width:960px; height:390px;*/ padding:0px; /*width:158px; height:82px;*/
+    text-align:left; text-decoration:none!important;
+    /*background:none;*/
+    /*background-color:inherit;*/
+		/*border: solid #999 1px;*/
+}
+#df_fader .slides .slide p {font-size:120%;}
+#df_fader .slides .slide img {position:relative; display:block; width:100%; height:auto; /*margin-bottom:80px;*/ z-index:1; border: solid #DDD 0px; }
+#df_fader .slides .slide .bgimage {position:absolute; top:0px; left:0px; margin:0px; /*padding:5px;	border: solid #DDD 0px;*/ }
+#df_fader .slides .slide .content {display:none; position:absolute; left:20px; top:20px; width:250px; height:300px; padding:25px 25px; padding-left:20px; /*background-color:#EEE; background: url('dfader-content-bg.png') left top repeat-y;*/ z-index:400!important;}
+#df_fader .slides .slide .content h2 { width:100%; color:#CC7A00!important; font-size:180%!important; font-weight:bold; padding:10px 0px; /*border-bottom: solid 3px #FFAA00;*/}
+#df_fader .slides .slide .content p {font-size:120%!important;}
+#df_fader .slides .slide .faderbutton {position:absolute; right:15px; bottom:10px;}
+#df_fader .slides .slide .intro-image {position:absolute; left:0px; top:0px;z-index:1;}
+#df_fader .slides .slide .intro-image-shadow {position:absolute; left:0px; top:0px; width:100%; height:100%; background: url('dfader-shadow.png') top center no-repeat; z-index:2;}
+#df_fader .slides .slide .title, #df_fader .slideold .title{/*position:absolute; display:block;*/ width:100%; height:50px; padding-top:12px; color:#FFF; font-size:20px; font-weight:bold; text-align:center; z-index:1;}
+#df_fader .slideold .title{display:none;}
+
+#df_fader .slides .slide .content .link {display:block; position:absolute; bottom:25px; width:216px; height:22px; padding:14px 12px; color:#FFF; font-size:20px; text-align:left; font-weight:bold; background: url('button240out.png') top right no-repeat; border: solid #666 0px;}
+#df_fader .slides .slide .content .link:hover {color:#FFF; text-decoration:none; background: url('button240over.png') top right no-repeat;}
+
+#df_fader .intro-image-shadow {position:absolute; left:0px; top:0px; width:100%; height:100%; background: url('dfader-shadow.png') top center no-repeat; z-index:3;}
+
+#df_fader .slides .slide img, #df_fader .slideold img{-webkit-border-radius:4px;-moz-border-radius:4px;-ms-border-radius:4px;-o-border-radius:4px;border-radius:4px;}
+
+/* buttons */
+#df_fader .sliderprev{
+  position:absolute;
+	width:50px; height:50px; color:#FFF; font-weight: bold;
+	background:url('dfader-prev-out.png') center center no-repeat;
+	display:block; cursor:pointer;
+	top:170px; left:10px;
+	z-index:4;
+}
+#df_fader .sliderprev:hover{
+	background:url('dfader-prev-over.png') center center no-repeat;
+}
+#df_fader .sliderprevnone, #df_fader .sliderprevnone:hover {
+	background:url('dfader-prev-none.png') center center no-repeat;
+}
+
+
+#df_fader .slidernext{
+  position:absolute;
+	width:50px; height:50px; color:#FFF; font-weight: bold;
+	background:url('dfader-next-out.png') center center no-repeat;
+	display:block; cursor:pointer;
+	top:170px; right:10px;
+	z-index:4;
+}
+#df_fader .slidernext:hover{
+	background:url('dfader-next-over.png') center  center no-repeat;
+}
+#df_fader .slidernextnone, #df_fader .slidernextnone:hover {
+	background:url('dfader-next-none.png') center center no-repeat;
+}
+
+
+#df_fader .slidernav { position:absolute; bottom:0px; width:865px; height:45px; padding-top:15px; padding-left:35px; border: solid #E0CB9C 0px;/*right:25px;*/ text-align:left!important; z-index:25; background:url('dfader-nav-bg.png') center center repeat-x;}
+#df_fader .slidernav .line { margin-left:5px; width:580px; /*border-top: solid #E0CB9C 2px;*/}
+#df_fader .slidernav .pos{/*display:block; width:36px; height:36px;*/ display:inline; float:none; padding:18px 18px; margin:0px; margin-right:10px; font-size:1px; color:#3E3127; font-weight:bold; text-align:center; background:url('dfader-nav-off.png') center center no-repeat;}
+#df_fader .slidernav .pos:hover{color:#3E3127; background:url('dfader-nav-over.png') center center no-repeat;}
+#df_fader .slidernav .active{color:#3E3127; background:url('dfader-nav-on.png') center center no-repeat;}
+#df_fader .slidernav .active:hover{color:#3E3127; background:url('dfader-nav-on.png') center center no-repeat;}
+/*#slidernav .pos span{display:block; width:16px; padding-top:6; text-align:center; float:left; font-size:130%; }*/
+
+#df_fader .loader {position:absolute; display:none; top:190px; left:354px; width:32px; height:32px; z-index:10; /*border:solid 1px #F00;*/}
+#df_fader .loaderhider {position:absolute; top:0px; left:0px; width:32px; height:32px; background-color:#FFF; z-index:1; }
+
+#df_fader .special {position:absolute; display:none; top:250px; left:30px; width:260px; height:120px; z-index:10; /*border:solid 1px #F00;*/}
+
+#df_fader a {text-decoration:none;}
+#df_fader a:hover {text-decoration:none;}
+/* vnitrni formatovani Slider */
+
+.button200px {/*position:absolute; left:0px; bottom:15px;*/ display:block; width:180px; height:47px; padding:23px 0px 0px 20px; color:#3E3127; font-size:20px; font-weight: normal; text-decoration:none; background: url('button200out.png') top center no-repeat; z-index:5;}
+.button200px:hover {color:#3E3127; background: url('button200over.png') top center no-repeat; text-decoration:none;}
+
+
+.intro-content {position:absolute; left:0px; top:50px; width:250px; height:auto; padding:15px 20px; background-color:#EFEFEF; z-index:3;}
+.faderbutton {position:absolute; right:15px; bottom:10px;}
+.intro-content h2 {color:#FF4800!important; font-size:160%!important; font-weight:bold; /*border-bottom: solid 3px #FFAA00;*/ width:470px;}
+.intro-content p {font-size:120%!important;}
+.bg-dark {color:#FFF;}
+.bg-dark h2{color:#FFF;}
+.bg-light {color:#000;}
+.bg-light h2{color:#000;}
+.bg-pink {color:#60383C;}
+.bg-pink h2{color:#D1606C;}
+
+@media all and (max-width:1024px){
+#df_fader img.spaceholder /*#df_fader .slides .slide img, #df_fader .slideold img*/ {padding-bottom:50px!important;}
+
+}

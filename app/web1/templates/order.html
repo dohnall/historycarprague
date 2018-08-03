@@ -1,0 +1,475 @@
+<script>
+;$(document).ready(function() {
+	$("#datepicker").datepicker({
+		minDate: "+{if $program->get('value', 'order_before')}{$program->get('value', 'order_before')}{else}{if $program->get('value', 'type') == '2' && $allowedToday === false}1{elseif $allowedToday === false}1{else}0{/if}{/if}D",
+		//maxDate: "+2M",
+		dateFormat: "yy-mm-dd",
+		firstDay: 1,
+		defaultDate: '{if $order_date}{$order_date}{else}{$smarty.now|date_format:"%Y-%m-%d"}{/if}',
+	    onSelect: function(dateText, inst) {
+	        var date = $(this).val();
+	        $.post(WEBID+'scripts/ajax.php?action=selectTime&lang='+$('#language .on a').attr('data-lang'), { date: date, program: $('#program').val() }, function(html) {
+	            $('#selectTime').html(html);
+{if $program->get('value', 'type') == '2'}
+				var capacity = parseInt($('#capacity').text());
+				if(capacity < 1) {
+					$('#show-form').addClass('displaynone');
+				} else {
+					$('#show-form').removeClass('displaynone');
+				}
+				$('#numpeople').prop('max', capacity);
+				$('#numpeople').prop('data-max', capacity);
+{else}
+	            $('#show-form').addClass('displaynone');
+	            $('#form_order_time_booked').addClass('displaynone');
+	            if($('input[name="time"]:enabled').size() == 0) {
+					$('#form_order_time_booked').removeClass('displaynone');
+				}
+{/if}
+	        });
+	    },
+	    option: $.datepicker.regional['{$LANG_CODE}']
+	});
+});
+</script>
+<h1>{$SECTION->get('value', 'header')}</h1>
+<h2>{$program->get('value', 'header')}</h2>
+<div class="clearer"></div>
+<p> </p>
+
+<div id="form-alert" class="center">
+<span class="bigger"><strong>{$DICTIONARY.form_order_alert}</strong></span><br />
+<div class="info big">{$DICTIONARY.form_order_alert_message}</div>
+</div>
+<img src="{$DESIGN}shadow.png" class="imgfull" alt="" />
+
+
+<form action="" method="post">
+	<div class="forms">
+	
+		<div class="w48 floatleft">
+		<h3>{$DICTIONARY.form_order_date}</h3>
+			<div id="datepicker"></div>
+			<div class="clearer"></div>
+		</div>
+		<div class="w50 floatright">
+		<h3>{if $program->get('value', 'type') != '2'}{$DICTIONARY.form_order_time_title}{else}{$DICTIONARY.form_order_time_title2}{/if}</h3>
+		<div id="selectTime">
+			<p class="big">{$DICTIONARY.form_order_time}</p>			
+		</div>
+		<div class="clearer"></div>
+    </div>
+		<div class="clearer"></div>
+		<p>&nbsp;</p>
+		
+		
+		
+		<p id="form_order_time_booked" class="center form-note displaynone"><span class="bigger"><strong>{$DICTIONARY.form_order_time_booked}</strong></span><br /></p>
+		
+		{if $program->get('value', 'last_minute')}<div class="tourstart2 w50 centered bold">{$DICTIONARY.last_minute}</div>{/if}
+		
+		<div id="show-form" class="displaynone">
+		<hr />
+		
+		<div class="w48 floatleft">
+			<h3>{$DICTIONARY.form_order_number}</h3>
+			<div class="forms-input floatleft w33">
+				<label>{$DICTIONARY.form_order_persons}</label> <span class="star">*</span><br />
+				<input class="changeTotal" type="number" min="{if $program->get('value', 'min')}{$program->get('value', 'min')}{else}1{/if}" max="{if $program->get('value', 'max')}{$program->get('value', 'max')}{else}120{/if}" data-max="{$program->get('value', 'max')}" data-min="{$program->get('value', 'min')}" data-carload="{if $program->get('value', 'carload')}{$program->get('value', 'carload')}{else}5{/if}" name="people" id="numpeople" value="{if $program->get('value', 'min')}{$program->get('value', 'min')}{else}1{/if}"/>
+			</div>
+{if $program->get('value', 'type') != '2'}
+			<div class="forms-input floatleft w33">
+				<label>{$DICTIONARY.form_order_cars}</label> <span class="star">*</span><br />
+				<input class="changeTotal" type="number" min="1" max="{if $program->get('value', 'carnumber')}{$program->get('value', 'carnumber')}{else}20{/if}" name="cars" id="numcars" value="{if $data.cars}{$data.cars}{else}1{/if}" />
+			  <p>{$program->get('value', 'after_price')}</p>
+      </div>
+{/if}
+{if $program->get('value', 'price_type') == 3}
+			<div class="forms-input floatleft w33">
+				<label>{$DICTIONARY.form_order_hours}</label> <span class="star">*</span><br />
+				<input class="changeTotal" type="number" min="1" max="10" name="hours" id="numhours" value="{if $data.hours}{$data.hours}{else}1{/if}" />
+			</div>			
+{/if}
+			<div class="clearer"></div>
+		</div>
+		<div class="w50 floatright">
+			<h3>{$DICTIONARY.form_order_pickup}</h3>
+			<div class="forms-input">
+				<label>{$DICTIONARY.form_order_pickup_note}</label> <span class="star">*</span><br />
+				<input type="text" name="location" value="{$data.location}" class="txt" id="pickup_loc" placeholder="{$DICTIONARY.form_order_pickup_text}" />
+			</div>
+			<div class="clearer"></div>
+		</div>
+		<div class="clearer"></div>
+		<!--<p>&nbsp;</p>
+		<p class="center form-note">{$DICTIONARY.form_order_capacity_info}</p>-->
+		
+
+{if $program->get('value', 'type') != '2'}
+<!-- accessories -->  
+<!--    <hr />
+		<div>
+			<h3>{$DICTIONARY.form_order_goods}</h3>
+			<div class="forms-input goods">
+	{foreach from=$HELPER->codebook('accessories') item=row}
+				<div class="item"><div class="input"><input class="accessory changeTotal" type="number" data-price="{$row->get('value', 'price')}" min="0" value="{if $data.accessory[$row->get('item', 'code')]}{$data.accessory[$row->get('item', 'code')]}{else}0{/if}" name="accessory[{$row->get('item', 'code')}]" /></div><div class="title">{$row->get('item', 'name')} ({$row->get('value', 'price')} {$DICTIONARY.currency})</div></div>
+	{/foreach}
+			  <div class="clearer"></div>
+      </div>
+			<div class="clearer"></div>
+		</div>
+-->
+<!-- accessories-end -->
+
+	
+		<div class="clearer"></div>
+		<p>&nbsp;</p>
+		<hr />
+{/if}
+		<div class="form w50 floatleft">
+			<h3>{$DICTIONARY.form_order_contact}<span class="star">*</span></h3>
+			<div class="forms-input">
+				<label>{$DICTIONARY.form_order_contact_name}</label><span class="star">*</span><br />
+				<input name="fullname" value="{$data.fullname}" class="txt" id="fullname" type="text"/>
+			</div>
+			<div class="forms-input">
+				<label>{$DICTIONARY.form_order_contact_email}</label><span class="star">*</span><br />
+				<input name="email" value="{$data.email}" class="txt" id="email" type="text" placeholder="{$DICTIONARY.form_order_contact_email_text}"/>
+			</div>
+			<div class="forms-input">
+				<label>{$DICTIONARY.form_order_contact_phone}</label><span class="star">*</span> <span id="#form-email-info"></span><br />
+				
+<div class="phonebox flex-container">	
+<div class="phonebox-code">
+
+<input name="phone_cc" value="" class="txt" id="phone_cc" type="text" placeholder="{$DICTIONARY.form_order_contact_phone_select}" readonly="readonly" />
+
+<div id="select-country-flag"><span></span></div>
+<div id="select-country-pos">
+<div id="select-country">
+<div value="420" class="flag flag-cze">Czech Republic (+420)</div>
+<div value="44" class="flag flag-unk">United Kingdom (+44)</div>
+<div value="1" class="flag flag-usa">United States (+1)</div>
+<div value="49" class="flag flag-ger">Germany (+49)</div>
+<div value="61" class="flag flag-aus">Australia (+61)</div>
+<div value="33" class="flag flag-fra">France (+33)</div>
+<div value="1" class="flag flag-can">Canada (+1)</div>
+<span class="select-line"></span>
+<div value="93" class="flag flag-afg">Afghanistan (+93)</div>
+<div value="355" class="flag flag-alb">Albania (+355)</div>
+<div value="213" class="flag flag-alg">Algeria (+213)</div>
+<div value="1684" class="flag flag-ame">American Samoa (+1684)</div>
+<div value="376" class="flag flag-and">Andorra (+376)</div>
+<div value="244" class="flag flag-ang">Angola (+244)</div>
+<div value="1264" class="flag flag-anl">Anguilla (+1 264)</div>
+<div value="1268" class="flag flag-ant">Antigua and Barbuda (+1268)</div>
+<div value="54" class="flag flag-arg">Argentina (+54)</div>
+<div value="374" class="flag flag-arm">Armenia (+374)</div>
+<div value="297" class="flag flag-aru">Aruba (+297)</div>
+<div value="61" class="flag flag-aus">Australia (+61)</div>
+<div value="43" class="flag flag-aut">Austria (+43)</div>
+<div value="994" class="flag flag-aze">Azerbaijan (+994)</div>
+<div value="1242" class="flag flag-bah">Bahamas (+1242)</div>
+<div value="973" class="flag flag-bhr">Bahrain (+973)</div>
+<div value="880" class="flag flag-ban">Bangladesh (+880)</div>
+<div value="1246" class="flag flag-bar">Barbados (+1246)</div>
+<div value="375" class="flag flag-blr">Belarus (+375)</div>
+<div value="32" class="flag flag-bel">Belgium (+32)</div>
+<div value="501" class="flag flag-blz">Belize (+501)</div>
+<div value="229" class="flag flag-ben">Benin (+229)</div>
+<div value="1441" class="flag flag-ber">Bermuda (+1441)</div>
+<div value="975" class="flag flag-bhu">Bhutan (+975)</div>
+<div value="591" class="flag flag-bol">Bolivia (+591)</div>
+<div value="387" class="flag flag-bos">Bosnia and Herzegovina (+387)</div>
+<div value="267" class="flag flag-bot">Botswana (+267)</div>
+<div value="55" class="flag flag-bra">Brazil (+55)</div>
+<div value="1284" class="flag flag-bri">British Virgin Islands (+1284)</div>
+<div value="673" class="flag flag-bru">Brunei (+673)</div>
+<div value="359" class="flag flag-bul">Bulgaria (+359)</div>
+<div value="226" class="flag flag-buf">Burkina Faso (+226)</div>
+<div value="95" class="flag flag-bur">Burma (Myanmar) (+95)</div>
+<div value="257" class="flag flag-brd">Burundi (+257)</div>
+<div value="855" class="flag flag-cam">Cambodia (+855)</div>
+<div value="237" class="flag flag-cmn">Cameroon (+237)</div>
+<div value="1" class="flag flag-can">Canada (+1)</div>
+<div value="238" class="flag flag-cap">Cape Verde (+238)</div>
+<div value="1345" class="flag flag-cay">Cayman Islands (+1345)</div>
+<div value="236" class="flag flag-car">Central African Republic (+236)</div>
+<div value="235" class="flag flag-cha">Chad (+235)</div>
+<div value="56" class="flag flag-chi">Chile (+56)</div>
+<div value="86" class="flag flag-chn">China (+86)</div>
+<div value="61" class="flag flag-chr">Christmas Island (+61)</div>
+<div value="61" class="flag flag-coc">Cocos (Keeling) Islands (+61)</div>
+<div value="57" class="flag flag-col">Colombia (+57)</div>
+<div value="269" class="flag flag-com">Comoros (+269)</div>
+<div value="242" class="flag flag-rep">Republic of the Congo (+242)</div>
+<div value="243" class="flag flag-dem">Dem. Republic of the Congo (+243)</div>
+<div value="682" class="flag flag-coo">Cook Islands (+682)</div>
+<div value="506" class="flag flag-cos">Costa Rica (+506)</div>
+<div value="385" class="flag flag-cro">Croatia (+385)</div>
+<div value="53" class="flag flag-cub">Cuba (+53)</div>
+<div value="357" class="flag flag-cyp">Cyprus (+357)</div>
+<div value="420" class="flag flag-cze">Czech Republic (+420)</div>
+<div value="45" class="flag flag-den">Denmark (+45)</div>
+<div value="253" class="flag flag-dji">Djibouti (+253)</div>
+<div value="1767" class="flag flag-dom">Dominica (+1767)</div>
+<div value="1809" class="flag flag-dmr">Dominican Republic (+1809)</div>
+<div value="670" class="flag flag-eas">East Timor (+670)</div>
+<div value="593" class="flag flag-ecu">Ecuador (+593)</div>
+<div value="20" class="flag flag-egy">Egypt (+20)</div>
+<div value="503" class="flag flag-els">El Salvador (+503)</div>
+<div value="240" class="flag flag-equ">Equatorial Guinea (+240)</div>
+<div value="291" class="flag flag-eri">Eritrea (+291)</div>
+<div value="372" class="flag flag-est">Estonia (+372)</div>
+<div value="251" class="flag flag-eth">Ethiopia (+251)</div>
+<div value="500" class="flag flag-fal">Falkland Islands (+500)</div>
+<div value="298" class="flag flag-far">Faroe Islands (+298)</div>
+<div value="679" class="flag flag-fij">Fiji (+679)</div>
+<div value="358" class="flag flag-fin">Finland (+358)</div>
+<div value="33" class="flag flag-fra">France (+33)</div>
+<div value="689" class="flag flag-fre">French Polynesia (+689)</div>
+<div value="241" class="flag flag-gab">Gabon (+241)</div>
+<div value="220" class="flag flag-gam">Gambia (+220)</div>
+<div value="970" class="flag flag-gaz">Gaza Strip (+970)</div>
+<div value="995" class="flag flag-geo">Georgia (+995)</div>
+<div value="49" class="flag flag-ger">Germany (+49)</div>
+<div value="233" class="flag flag-gha">Ghana (+233)</div>
+<div value="350" class="flag flag-gib">Gibraltar (+350)</div>
+<div value="30" class="flag flag-gre">Greece (+30)</div>
+<div value="299" class="flag flag-grn">Greenland (+299)</div>
+<div value="1473" class="flag flag-grd">Grenada (+1473)</div>
+<div value="1671" class="flag flag-gua">Guam (+1671)</div>
+<div value="502" class="flag flag-gut">Guatemala (+502)</div>
+<div value="224" class="flag flag-gia">Guinea (+224)</div>
+<div value="245" class="flag flag-gib">Guinea-Bissau (+245)</div>
+<div value="592" class="flag flag-guy">Guyana (+592)</div>
+<div value="509" class="flag flag-hai">Haiti (+509)</div>
+<div value="504" class="flag flag-hon">Honduras (+504)</div>
+<div value="852" class="flag flag-hnk">Hong Kong (+852)</div>
+<div value="36" class="flag flag-hun">Hungary (+36)</div>
+<div value="354" class="flag flag-ice">Iceland (+354)</div>
+<div value="91" class="flag flag-ind">India (+91)</div>
+<div value="62" class="flag flag-ins">Indonesia (+62)</div>
+<div value="98" class="flag flag-irn">Iran (+98)</div>
+<div value="964" class="flag flag-irq">Iraq (+964)</div>
+<div value="353" class="flag flag-ire">Ireland (+353)</div>
+<div value="44" class="flag flag-isl">Isle of Man (+44)</div>
+<div value="972" class="flag flag-isr">Israel (+972)</div>
+<div value="39" class="flag flag-ita">Italy (+39)</div>
+<div value="225" class="flag flag-ivo">Ivory Coast (+225)</div>
+<div value="1876" class="flag flag-jam">Jamaica (+1876)</div>
+<div value="81" class="flag flag-jap">Japan (+81)</div>
+<div value="962" class="flag flag-jor">Jordan (+962)</div>
+<div value="7" class="flag flag-kaz">Kazakhstan (+7)</div>
+<div value="254" class="flag flag-ken">Kenya (+254)</div>
+<div value="686" class="flag flag-kir">Kiribati (+686)</div>
+<div value="381" class="flag flag-kos">Kosovo (+381)</div>
+<div value="965" class="flag flag-kuw">Kuwait (+965)</div>
+<div value="996" class="flag flag-kyr">Kyrgyzstan (+996)</div>
+<div value="856" class="flag flag-lao">Laos (+856)</div>
+<div value="371" class="flag flag-lat">Latvia (+371)</div>
+<div value="961" class="flag flag-leb">Lebanon (+961)</div>
+<div value="266" class="flag flag-les">Lesotho (+266)</div>
+<div value="231" class="flag flag-lir">Liberia (+231)</div>
+<div value="218" class="flag flag-lib">Libya (+218)</div>
+<div value="423" class="flag flag-lie">Liechtenstein (+423)</div>
+<div value="370" class="flag flag-lit">Lithuania (+370)</div>
+<div value="352" class="flag flag-lux">Luxembourg (+352)</div>
+<div value="853" class="flag flag-mac">Macau (+853)</div>
+<div value="389" class="flag flag-maa">Macedonia (+389)</div>
+<div value="261" class="flag flag-mad">Madagascar (+261)</div>
+<div value="265" class="flag flag-mlw">Malawi (+265)</div>
+<div value="60"  class="flag flag-mls">Malaysia (+60)</div>
+<div value="960" class="flag flag-mld">Maldives (+960)</div>
+<div value="223" class="flag flag-mal">Mali (+223)</div>
+<div value="356" class="flag flag-mlt">Malta (+356)</div>
+<div value="692" class="flag flag-mar">Marshall Islands (+692)</div>
+<div value="222" class="flag flag-mua">Mauritania (+222)</div>
+<div value="230" class="flag flag-mus">Mauritius (+230)</div>
+<div value="269" class="flag flag-may">Mayotte (+269)</div>
+<div value="52"  class="flag flag-mex">Mexico (+52)</div>
+<div value="691" class="flag flag-mic">Micronesia (+691)</div>
+<div value="373" class="flag flag-mol">Moldova (+373)</div>
+<div value="377" class="flag flag-mnc">Monaco (+377)</div>
+<div value="976" class="flag flag-mng">Mongolia (+976)</div>
+<div value="382" class="flag flag-mnt">Montenegro (+382)</div>
+<div value="1664" class="flag flag-mon">Montserrat (+1664)</div>
+<div value="212" class="flag flag-mor">Morocco (+212)</div>
+<div value="258" class="flag flag-moz">Mozambique (+258)</div>
+<div value="264" class="flag flag-nam">Namibia (+264)</div>
+<div value="674" class="flag flag-nau">Nauru (+674)</div>
+<div value="977" class="flag flag-nep">Nepal (+977)</div>
+<div value="31" class="flag flag-net">Netherlands (+31)</div>
+<div value="599" class="flag flag-neta">Netherlands Antilles (+599)</div>
+<div value="687" class="flag flag-newc">New Caledonia (+687)</div>
+<div value="64" class="flag flag-newz">New Zealand (+64)</div>
+<div value="505" class="flag flag-nic">Nicaragua (+505)</div>
+<div value="227" class="flag flag-ngr">Niger (+227)</div>
+<div value="234" class="flag flag-nga">Nigeria (+234)</div>
+<div value="683" class="flag flag-niu">Niue (+683)</div>
+<div value="850" class="flag flag-nko">North Korea (+850)</div>
+<div value="47" class="flag flag-nor">Norway (+47)</div>
+<div value="968" class="flag flag-oma">Oman (+968)</div>
+<div value="92" class="flag flag-pak">Pakistan (+92)</div>
+<div value="680" class="flag flag-pal">Palau (+680)</div>
+<div value="507" class="flag flag-pan">Panama (+507)</div>
+<div value="675" class="flag flag-pap">Papua New Guinea (+675)</div>
+<div value="595" class="flag flag-par">Paraguay (+595)</div>
+<div value="51" class="flag flag-per">Peru (+51)</div>
+<div value="63" class="flag flag-phi">Philippines (+63)</div>
+<div value="64" class="flag flag-pit">Pitcairn Islands (+64)</div>
+<div value="48" class="flag flag-pol">Poland (+48)</div>
+<div value="351" class="flag flag-por">Portugal (+351)</div>
+<div value="1" class="flag flag-pue">Puerto Rico (+1)</div>
+<div value="974" class="flag flag-qat">Qatar (+974)</div>
+<div value="40" class="flag flag-rom">Romania (+40)</div>
+<div value="7" class="flag flag-rus">Russia (+7)</div>
+<div value="250" class="flag flag-rwa">Rwanda (+250)</div>
+<div value="590" class="flag flag-sai">Saint Barthelemy (+590)</div>
+<div value="685" class="flag flag-sam">Samoa (+685)</div>
+<div value="378" class="flag flag-san">San Marino (+378)</div>
+<div value="239" class="flag flag-sao">Sao Tome and Principe (+239)</div>
+<div value="966" class="flag flag-sau">Saudi Arabia (+966)</div>
+<div value="221" class="flag flag-sen">Senegal (+221)</div>
+<div value="381" class="flag flag-ser">Serbia (+381)</div>
+<div value="248" class="flag flag-sey">Seychelles (+248)</div>
+<div value="232" class="flag flag-sie">Sierra Leone (+232)</div>
+<div value="65" class="flag flag-sin">Singapore (+65)</div>
+<div value="421" class="flag flag-slk">Slovakia (+421)</div>
+<div value="386" class="flag flag-slo">Slovenia (+386)</div>
+<div value="677" class="flag flag-sol">Solomon Islands (+677)</div>
+<div value="252" class="flag flag-som">Somalia (+252)</div>
+<div value="27" class="flag flag-saf">South Africa (+27)</div>
+<div value="82" class="flag flag-sko">South Korea (+82)</div>
+<div value="34" class="flag flag-spa">Spain (+34)</div>
+<div value="94" class="flag flag-sri">Sri Lanka (+94)</div>
+<div value="290" class="flag flag-sth">Saint Helena (+290)</div>
+<div value="1869" class="flag flag-stk">Saint Kitts and Nevis (+1869)</div>
+<div value="1758" class="flag flag-stl">Saint Lucia (+1758)</div>
+<div value="508" class="flag flag-stp">Saint Pierre and Miquelon (+508)</div>
+<div value="1784" class="flag flag-stv">Saint Vincent and the Grenadines (+1784)</div>
+<div value="249" class="flag flag-sud">Sudan (+249)</div>
+<div value="597" class="flag flag-sur">Suriname (+597)</div>
+<div value="268" class="flag flag-swa">Swaziland (+268)</div>
+<div value="46" class="flag flag-swe">Sweden (+46)</div>
+<div value="41" class="flag flag-swi">Switzerland (+41)</div>
+<div value="963" class="flag flag-syr">Syria (+963)</div>
+<div value="886" class="flag flag-tai">Taiwan (+886)</div>
+<div value="992" class="flag flag-taj">Tajikistan (+992)</div>
+<div value="255" class="flag flag-tan">Tanzania (+255)</div>
+<div value="66" class="flag flag-tha">Thailand (+66)</div>
+<div value="228" class="flag flag-tog">Togo (+228)</div>
+<div value="690" class="flag flag-tok">Tokelau (+690)</div>
+<div value="676" class="flag flag-ton">Tonga (+676)</div>
+<div value="1868" class="flag flag-tri">Trinidad and Tobago (+1868)</div>
+<div value="216" class="flag flag-tun">Tunisia (+216)</div>
+<div value="90" class="flag flag-tur">Turkey (+90)</div>
+<div value="993" class="flag flag-trk">Turkmenistan (+993)</div>
+<div value="1649" class="flag flag-tci">Turks and Caicos Islands (+1649)</div>
+<div value="688" class="flag flag-tuv">Tuvalu (+688)</div>
+<div value="971" class="flag flag-uae">United Arab Emirates (+971)</div>
+<div value="256" class="flag flag-uga">Uganda (+256)</div>
+<div value="44" class="flag flag-unk">United Kingdom (+44)</div>
+<div value="380" class="flag flag-ukr">Ukraine (+380)</div>
+<div value="598" class="flag flag-uru">Uruguay (+598)</div>
+<div value="1" class="flag flag-usa">United States (+1)</div>
+<div value="998" class="flag flag-uzb">Uzbekistan (+998)</div>
+<div value="678" class="flag flag-van">Vanuatu (+678)</div>
+<div value="39" class="flag flag-hol">Holy See (Vatican City) (+39)</div>
+<div value="58" class="flag flag-ven">Venezuela (+58)</div>
+<div value="84" class="flag flag-vie">Vietnam (+84)</div>
+<div value="1340" class="flag flag-vii">US Virgin Islands (+1340)</div>
+<div value="681" class="flag flag-wal">Wallis and Futuna (+681)</div>
+<div value="970" class="flag flag-wes">West Bank (+970)</div>
+<div value="967" class="flag flag-yem">Yemen (+967)</div>
+<div value="260" class="flag flag-zam">Zambia (+260)</div>
+<div value="263" class="flag flag-zim">Zimbabwe (+263)</div>
+</div>
+</div>
+		
+						</div>
+						<div class="phonebox-num">
+     				<input name="phone" value="{$data.phone}" class="txt" id="phone" type="text" placeholder="{$DICTIONARY.form_order_contact_phone_text}"/>
+            </div>
+
+            </div><!--phone-->
+
+            <div class="clearer"></div>
+              {$DICTIONARY.form_order_contact_phone_format}       
+
+      
+      
+      <div class="clearer"></div>
+      </div>
+     
+			<p> </p>			
+			<a href="javascript:;" id="forms-comment-enable" class="big underline">{$DICTIONARY.form_order_commentshow}</a><br />
+	  		<div id="forms-comment" class="forms-input">
+					<label>{$DICTIONARY.form_order_comment}</label><span class="star">*</span> <br />
+					<textarea name="note" placeholder="{$DICTIONARY.form_order_comment_text}">{$data.note}</textarea>
+				<div class="clearer"></div>
+	      	</div>
+      			
+      <p>&nbsp;</p>
+			<div class="clearer"></div>	
+		</div>
+		<div class="form w50 floatright" id="payment">					
+			<h3>{$DICTIONARY.form_order_payment}</h3>
+			<input type="radio" name="payment" value="cash" id="payment3"{if $data.payment == 'cash'} checked="checked"{/if} /><label for="payment3" class="radio"><strong>{if $program->get('value', 'accept_credit_cards')}{$DICTIONARY.form_order_payment_cash_card}{else}{$DICTIONARY.form_order_payment_cash}{/if}</strong></label><br />
+
+			<!--input type="radio" name="payment" value="transfer" id="payment1"{if $data.payment == 'transfer'} checked="checked"{/if} /><label for="payment1" class="radio"><strong>{$DICTIONARY.form_order_payment_bank}</strong></label><br /-->
+			<input type="radio" name="payment" value="paypal" id="payment2"{if $data.payment == 'paypal'} checked="checked"{/if} /><label for="payment2" class="radio"><strong>PayPal</strong> <img src="{$DESIGN}paypal-cards.png" class="paypal-cards" alt="{$DICTIONARY.form_order_payment_paypal}" /> <br /><span class="small">{$DICTIONARY.form_order_payment_paypal}</span></label><br />
+
+			<div class="clearer"></div>
+		</div>  
+		<div class="clearer"></div>
+		
+		
+		
+		
+		<div class="w100 floatleft">
+{if $program->get('value', 'sale')}    
+		<p><br /><span class="striked">{$DICTIONARY.form_order_price} &nbsp;&nbsp;<span id="total">{$total}</span> {$DICTIONARY.currency_text}</span><br />
+		<span class="big">{$DICTIONARY.form_order_price_sale} &nbsp;&nbsp;<span id="totalsale">{math equation="x - (x * y / 100)" x=$total y=$program->get('value', 'sale')}</span> {$DICTIONARY.currency_text} ({$program->get('value', 'sale_info')})</span><br />
+		<!--<span class="big">{$DICTIONARY.form_order_goods}: &nbsp;&nbsp;<span id="total2">{$total2}</span> {$DICTIONARY.currency}</span>-->
+		</p>
+		<p><span class="superbig totalprice">{$DICTIONARY.form_order_totalprice} &nbsp;&nbsp;<span id="sale" data-item-sale="{$program->get('value', 'sale')}" class="bold">{math equation="x - (x * y / 100) + z" x=$total y=$program->get('value', 'sale') z=$total2}</span> {$DICTIONARY.currency_text}</span></p>
+{else}
+    <!--<p><br /><span class="big">{$DICTIONARY.form_order_goods}: &nbsp;&nbsp;<span id="total2">{$total2}</span> {$DICTIONARY.currency}</span>
+		</p>-->
+    <p><span class="superbig totalprice">{$DICTIONARY.form_order_totalprice} &nbsp;&nbsp;<span id="total">{$total+$total2}</span> {$DICTIONARY.currency_text}</span></p>
+{/if}
+		</div>
+		<div class="w100 floatright center">
+		<p></p>
+					<div class="forms-input" id="souhlasbox">
+            <div class="center centered"><input name="souhlas" value="{$DICTIONARY.privacypolicy_value}" id="souhlas" type="checkbox" /> <label for="souhlas" class="checkbox">{$DICTIONARY.privacypolicy_info1} <strong><a href="{$HELPER->section(992)->get('url')}" class="targetblank underline">{$DICTIONARY.privacypolicy_info2}</a></strong>.<span class="req"></span></label></div>
+ 		        <div class="clearer"></div>
+      </div>
+		<p></p>
+		<script type="text/javascript">
+        document.write('<input type="hidden" name="antispam" value="nos' + 'pam">');
+        </script>
+		<input type="hidden" id="program" name="program" value="{$program->section_id}">
+		<input type="hidden" id="price" name="price" value="{$program->get('value', 'price')}">
+		<input type="hidden" id="price_type" name="price_type" value="{$program->get('value', 'price_type')}">
+    <div class="center">
+    <input type="submit" name="submit" class="submit" value="{$DICTIONARY.form_order_book}" />
+    </div>
+		</div>
+		<div class="clearer"></div>
+    <p>&nbsp;</p> 
+		<p>&nbsp;</p>
+				
+		
+		<!--<a class="button-back floatleft" href="nabidka-detail.html">Zpět</a>
+		<input type="hidden" id="program" name="program" value="{$program->section_id}">
+		<input type="hidden" id="price" name="price" value="{$program->get('value', 'price')}">
+		<input type="submit" name="submit" class="continue submit" value="Objednat" />
+		<div class="clearer"></div>
+		<p>&nbsp;</p>-->
+		
+		</div><!-- show-form -->
+		
+	</div>
+</form>

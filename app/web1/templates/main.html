@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="{$DICTIONARY.x_lang}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=0.55, maximum-scale=0.55">
+<meta name="robots" content="all,follow"/>
+<title>{$SECTION->get('title')}</title>
+<meta name="description" content="{$SECTION->get('section', 'description')}"/>
+<meta name="keywords" content="{$SECTION->get('section', 'keywords')}"/>
+<meta name="author" content="&copy;2014 HeavenDesign.cz - Branislav Fábry, http://www.heavendesign.cz"/>
+<link rel="icon" type="image/png" href="{$DESIGN}logo.png" />
+<script type="text/javascript" src="{$JS}jquery.js"></script>
+<script type="text/javascript" src="{$JS}loadcss.js"></script>
+<script type="text/javascript" src="{$JS}jquery-ui.js"></script>
+{if $LANG_CODE == 'cz'}
+<script type="text/javascript" src="{$JS}jquery.ui.datepicker-cz.js"></script>
+{/if}
+<link rel="stylesheet" type="text/css" href="{$DESIGN}styly.css?20180115" />
+{if $TEMPLATE == 'order'}<link rel="stylesheet" type="text/css" href="{$DESIGN}jquery-ui.css" />{/if}
+{if $TEMPLATE == 'offer'}<link rel="stylesheet" type="text/css" href="{$DESIGN}dfader-v42.css" />{/if}
+
+</head>
+<body>
+<div class="bodybg"><div class="bodybgimage"></div></div>
+<div class="body">
+<div class='cookie-notice'>{$DICTIONARY.cookie_info} <a href='javascript:;' class='cookie-button'>{$DICTIONARY.cookie_agreement}</a></div>
+
+	<!--MENU-->
+	<div class="mainmenu-overlay"><div class="mainmenu-overlay-image"><div class="logo"><a href="{$HELPER->section(1)->get('url')}">&nbsp;</a></div></div></div>
+	<div id="mainmenu-toggle" class=""></div>
+	<div id="mainmenu">
+		<div class="mainmenuContent">
+			<div class="mainmenuBox">
+        <ul class="flex-container">
+      {foreach from=$MENUS.main.items item=menu}
+          <li class="{if $menu@first}first{/if}{if in_array($menu.item.section_id, array_keys($SECTION->get('path'))) && ($menu.item.section_id != $HOME->section_id || $SECTION->section_id == $HOME->section_id)} on{/if}"><a href="{if $menu.item.url}{$menu.item.url}{else}{$menu.item.section->get('url')}{/if}">{if $menu.item.name}{$menu.item.name}{else}{$menu.item.section->get('text', 'name')}{/if}</a><span></span></li>
+      {/foreach}
+			  </ul>
+			  <div class="clearer"></div>
+		  </div>
+		</div> 
+	</div>
+	<div id="language">
+	<ul>
+     <li{if $LANG_CODE == 'en'} class="on"{/if}><a href="{$ROOT}" data-lang="en">EN</a></li>
+     <li{if $LANG_CODE == 'cz'} class="on"{/if}><a href="{$ROOT}cz/" data-lang="cz">CZ</a></li>
+	</ul>
+	</div>
+	<!--MENU-END-->
+	<a href="tel:+420{$DICTIONARY.header_call_phone_href}" id="call"><!--<span>{$DICTIONARY.header_call}</span><br />-->
+		<span class="number"><span class="lightred">+420</span> {$DICTIONARY.header_call_phone}</span>
+	</a>
+	<div id="header">
+	  <div class="headerContent">
+        <div class="logo"><a href="{$HELPER->section(1)->get('url')}"><br /><br /><br /><!--<center>Místo pro logo</center>--></a></div>
+        <div class="title">
+            <span class="title-h1">{$DICTIONARY.head_title_1}</span><br />
+            <span class="title-h2">{$DICTIONARY.head_title_2}</span>
+        <div class="clearer"></div>
+        </div>
+        <!--<div class="linebox"><div class="line"><div class="line-l"></div><div class="line-c"></div><div class="line-r"></div></div></div>-->
+    <div class="clearer"></div>
+    </div>
+  <div class="clearer"></div>
+  </div><!--header -->
+	<!-- PAGE CONTENT ================== -->
+  <div id="page">
+    <div class="pageContent pageContentIndex">
+    <!-- maintence -->
+    <!--<p class="w100 superbig white bold center">{$DICTIONARY.maintenance}</p>
+    <div class="clearer"></div>-->
+    <!--NAVIGATION-->
+      {if $TEMPLATE != 'index'}
+      <!--<div id="navi">
+        <div class="naviContent">
+        {foreach from=$SECTION->get('path') item=row name=path}
+        {if $smarty.foreach.path.last === false}<a href="{$row->get('url')}">{$row->get('text', 'name')}</a> / {else}<strong>{$row->get('text', 'name')}</strong>{/if}
+        {/foreach}
+        </div>
+      </div>-->
+      {/if}	
+      <!--NAVIGATION-END-->	
+      {include file=$TEMPLATE_LANG}
+      <div class="clearer"></div>
+      <div class="infobox">     
+      <p class="center big">{$DICTIONARY.social_media_text}</p>
+      <a href="https://www.tripadvisor.cz/Attraction_Review-g274707-d11708188-Reviews-History_Car_Prague-Prague_Bohemia.html" title="TripAdvisor" class="targetblank"><img src="{$DESIGN}media-tripadvisor.png" alt="TripAdvisor"/></a>&nbsp;&nbsp;&nbsp;
+      <a href="https://www.facebook.com/historycarprague/" title="Facebook" class="targetblank"><img src="{$DESIGN}media-facebook.png" alt="Facebook"/></a>
+      <div class="clearer"></div>
+      </div>
+      <div class="clearer"></div>
+    </div><!-- PAGE-CONTENT-END -->
+  </div><!-- PAGE-END -->
+	<!-- FOOTER ================== -->
+  <div id="footer">
+    <div class="footerContent">
+      <div id="footermenu" class="w60 floatleft">
+      {foreach from=$MENUS.footer.items item=menu}
+        <a href="{if $menu.item.url}{$menu.item.url}{else}{$menu.item.section->get('url')}{/if}">{if $menu.item.name}{$menu.item.name}{else}{$menu.item.section->get('text', 'name')}{/if}</a>{if $menu@last == false} <span>|</span> {/if}
+      {/foreach}     
+      <div class="clearer"></div>
+      </div>
+      <div class="w35 floatright"><br />{if $LANG_CODE == 'cz'}<img src="{$DESIGN}paypal-cz.png" class="imgfull" alt="" />{else}<img src="{$DESIGN}paypal-en.png" class="imgfull" alt="" />{/if}</div>
+    <div class="clearer"></div>
+    </div>
+  <div class="clearer"></div>
+  </div><!--footer-->
+	<!-- COPY ==================== -->
+  <div id="copy">
+    <div class="copyContent">
+      <!--<div class="linebox"><div class="line"></div></div>-->
+      <p>{$DICTIONARY.footer_copyright_info}</p>
+      <a href="http://www.heavendesign.cz" class="heavendesign" title="Tvorba web prezentací, e-shopy, webové animace, reklamní bannery, grafika, fotografie - HeavenDesign.cz">WebDesign by <br />Heaven Design</a>
+      </div>
+  </div><!--copy--> 
+  <div class="clearer"></div>  
+</div><!--bodyBox-->
+<!-- FACEBOOK =================== -->
+<div id="fb-root"></div>
+<div id="facebook">
+<div class="facebook-label"><img src="{$DESIGN}facebook-bar.png" alt="" /></div>
+<div class="facebook-content"><div class="close"></div>
+<div class="fb-page" data-href="https://www.facebook.com/historycarprague/" data-small-header="false" data-adapt-container-width="true" data-hide-cover="false" data-show-facepile="false"></div>
+<div class="clearer"></div>
+<p class="center"><br /><a href="https://www.facebook.com/historycarprague/" class="fb-link big targetblank" rel="nofollow">{$DICTIONARY.facebook_button}</a></p>
+</div>
+</div>
+<!-- TRIPADVISOR =================== -->
+<div id="tripadvisor">
+<a href="https://www.tripadvisor.cz/Attraction_Review-g274707-d11708188-Reviews-History_Car_Prague-Prague_Bohemia.html" class="targetblank"><img src="{$DESIGN}tripadvisor-bar.png" alt="" /></a>
+</div>
+
+<!-- SCRIPTS ==================== -->
+{if $TEMPLATE == 'offer'}<script type="text/javascript" src="{$JS}dfader-v42.js"></script>{/if}
+<script type="text/javascript" src="{$JS}lightbox.js"></script>
+<script type="text/javascript" src="{$JS}dcore.js"></script>
+<script type="text/javascript" src="{$JS}load.php"></script>
+<script type="text/javascript" src="{$JS}main.js"></script>
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){ i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments) },i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-69110643-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

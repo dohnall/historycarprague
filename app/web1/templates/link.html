@@ -1,0 +1,13 @@
+<!-- DETAIL -->
+{if !$SECTION->get('value', 'nodate')}
+<strong class="big ">{$SECTION->get('value', 'date')|date_format:"%d.%m.%Y"}</strong>
+{/if}
+<h1>{$SECTION->get('section', 'name')}</h1>
+{$image = $SECTION->get('file', 'image')}
+{if $image}
+<img src="{$FILES}250/{$image[0].file}" alt="" class="float-right20">
+{/if}
+{$SECTION->get('value', 'content')}
+<div class="FFclearer"></div>
+<br />
+<!-- DETAIL-KONEC -->

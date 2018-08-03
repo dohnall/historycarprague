@@ -1,0 +1,35 @@
+<h1>{$SECTION->get('section', 'name')}</h1>
+{$SECTION->get('value', 'content')}
+<p>&nbsp;</p>
+
+
+<!--<div class="pages">
+  <a href="#" title="Předchozí stránka" class="prev"><span>&nbsp;</span></a>
+  <a href="#"><span>1</span></a>
+   <span>&nbsp;&nbsp; &hellip; &nbsp;</span>
+  <a href="#"><span>5</span></a>
+  <a href="#"><span>6</span></a>
+  <a href="#" class="active"><span>7</span></a>
+  <a href="#"><span>8</span></a>
+  <a href="#"><span>9</span></a>
+  <span>&nbsp;&nbsp; &hellip; &nbsp;</span>
+  <a href="#"><span>28</span></a>
+  <a href="#" title="Další stránka" class="next"><span>&nbsp;</span></a>
+</div>--><!-- pages -->
+
+<div id="newsList">
+{foreach from=$COMPONENTS.news item=row}
+{$image = $row->get('file', 'image')}
+  <div class="item w504 floatleft">
+		{if $image}<div class="image w50 floatleft"><a href="{$row->get('url')}"><img src="{$FILES}{$image[0].file}" alt="" /></a></div>{/if}
+		<div class="text w40 floatleft">
+			<h2 class="small"><a href="{$row->get('url')}">{$row->get('section', 'name')}</a></h2>
+		</div>
+		<div class="cols order"><a href="{$row->get('url')}" class="button floatright">{$DICTIONARY.button_readmore}</a></div>
+		<div class="clearer"></div>
+  </div>
+{/foreach}
+	{include file="pager.html" pager=$PAGERS.news}
+</div><!-- productList -->
+
+
